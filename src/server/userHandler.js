@@ -200,6 +200,60 @@ const getUser = async (request, h) => {
       message: "Internal Server Error",
     }).code(500);
   }
+
 };
 
-module.exports = { register, login, updateUser, deleteUser, getUser };
+const updateProfile = async (request, h) => {
+  const userId = request.user.id;  // Mengambil ID pengguna dari token yang sudah diverifikasi
+  const { name, gender, weight, height } = request.payload;
+
+  try {
+    const updatedData = { name, gender, weight, height };
+
+    // Update user data
+    await updateUserById(userId, updatedData);
+
+    return h.response({
+      status: "success",
+      message: "Profile updated successfully",
+    }).code(200);
+  } catch (error) {
+    console.error("Error in updateProfile:", error);
+    return h.response({
+      status: "Fail",
+      message: "Internal Server Error",
+    }).code(500);
+  }
+};
+
+
+const getProfile = async (request, h) => {
+  const userId = request.user.id;  // Mengambil ID pengguna dari token yang sudah diverifikasi
+
+  try {
+    const userSnapshot = await getUserById(userId);
+
+    if (!userSnapshot.exists) {
+      return h.response({
+        status: false,
+        message: "User not found",
+      }).code(404);
+    }
+
+    const user = userSnapshot.data();
+    delete user.password;
+
+    return h.response({
+      status: "success",
+      data: user,
+    }).code(200);
+  } catch (error) {
+    console.error("Error in getProfile:", error);
+    return h.response({
+      status: "Fail",
+      message: "Internal Server Error",
+    }).code(500);
+  }
+};
+
+module.exports = { register, login, updateUser, deleteUser, getUser, updateProfile, getProfile };

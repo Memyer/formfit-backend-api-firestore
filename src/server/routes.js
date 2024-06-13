@@ -1,5 +1,5 @@
 // Import necessary handlers and middleware
-const { register, login, updateUser, deleteUser, getUser } = require("../server/userHandler");
+const { register, login, updateUser, deleteUser, getUser, updateProfile, getProfile } = require("../server/userHandler");
 const { verifyToken } = require("../middleware/authMiddleware");
 
 // Define the routes array with various endpoints
@@ -55,7 +55,23 @@ const routes = [
     options: {
       pre: [{ method: verifyToken }], // Middleware to verify token before deleting user
     },
+  },{
+    method: "PUT",
+    path: "/profile",
+    handler: updateProfile,
+    options: {
+      pre: [{ method: verifyToken }],
+    },
   },
+  {
+    method: "GET",
+    path: "/profile",
+    handler: getProfile,
+    options: {
+      pre: [{ method: verifyToken }],
+    },
+  },
+
 ];
 
 // Export the routes array to be used in server setup
