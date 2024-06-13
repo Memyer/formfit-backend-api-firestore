@@ -21,6 +21,8 @@ https://formfit-backend-api-firestore-jgyozsb3oq-uc.a.run.app
   "status": "success",
   "message": "testing"
 }
+```
+
 
 ### 2. Register
 
@@ -35,7 +37,7 @@ https://formfit-backend-api-firestore-jgyozsb3oq-uc.a.run.app
   "email": "string",
   "password": "string"
 }
-
+```
 **Request:**
 ```json
 {
@@ -47,3 +49,4 @@ https://formfit-backend-api-firestore-jgyozsb3oq-uc.a.run.app
     "name": "string"
   }
 }
+```
