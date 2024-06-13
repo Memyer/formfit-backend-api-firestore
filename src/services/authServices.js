@@ -1,51 +1,73 @@
-const Firestore = require("@google-cloud/firestore");
+const { Firestore } = require('@google-cloud/firestore');
 
-//inisiasi firestore dan collection users
-const db = new Firestore({
-  databaseId: "formfitdbs",
+const firestore = new Firestore({
+  projectId: 'formfitdbs',
 });
-const usersCollection = db.collection("users");
 
-//ambil user berdasarkan email
-const getUserByEmail = async (email) => {
-  return await usersCollection.where("email", "==", email).get();
+const usersRef = firestore.collection('users');
+
+/**
+ * Fetch a user by their email.
+ * @param {string} email - The email of the user to fetch.
+ * @returns {Promise<Firestore.QuerySnapshot>} - The query snapshot of the user.
+ */
+const findUserByEmail = async (email) => {
+  const query = usersRef.where('email', '==', email);
+  const snapshot = await query.get();
+  return snapshot;
 };
 
-//create new ser
-const createUser = (userData) => {
-  return db.collection("users").add(userData);
+/**
+ * Add a new user to the database.
+ * @param {Object} userData - The data of the user to create.
+ * @returns {Promise<Firestore.DocumentReference>} - The reference to the newly created user document.
+ */
+const addUser = (userData) => {
+  return usersRef.add(userData);
 };
 
-//update user berdasarkan Id
-const updateUserById = async (id, user) => {
-  const userDoc = usersCollection.doc(id);
-  const updateData = {};
+/**
+ * Update an existing user by their ID.
+ * @param {string} id - The ID of the user to update.
+ * @param {Object} user - The user data to update.
+ * @returns {Promise<Firestore.WriteResult>} - The result of the update operation.
+ */
+const modifyUserById = async (id, user) => {
+  const userRef = usersRef.doc(id);
+  const updates = {};
 
-  if (user.email !== undefined) {
-    updateData.email = user.email;
-  }
+  if (user.email) updates.email = user.email;
+  if (user.password) updates.password = user.password;
+  if (user.name) updates.name = user.name;
 
-  if (user.password !== undefined) {
-    updateData.password = user.password;
-  }
-
-  if (user.name !== undefined) {
-    updateData.name = user.name;
-  }
-
-  return await userDoc.update(updateData);
+  return await userRef.update(updates);
 };
 
-//hapus user berdasarkan Id
-const deleteUserById = async (id) => {
-  const userDoc = usersCollection.doc(id);
-  return await userDoc.delete();
+/**
+ * Delete a user by their ID.
+ * @param {string} id - The ID of the user to delete.
+ * @returns {Promise<Firestore.WriteResult>} - The result of the delete operation.
+ */
+const removeUserById = async (id) => {
+  const userRef = usersRef.doc(id);
+  return await userRef.delete();
 };
 
-//ambil dara user berdasarkan Id
-const getUserById = async (id) => {
-  const userDoc = usersCollection.doc(id);
-  return await userDoc.get();
+/**
+ * Get a user by their ID.
+ * @param {string} id - The ID of the user to fetch.
+ * @returns {Promise<Firestore.DocumentSnapshot>} - The snapshot of the user document.
+ */
+const fetchUserById = async (id) => {
+  const userRef = usersRef.doc(id);
+  const doc = await userRef.get();
+  return doc;
 };
 
-module.exports = { getUserByEmail, createUser, updateUserById, deleteUserById, getUserById };
+module.exports = {
+  findUserByEmail,
+  addUser,
+  modifyUserById,
+  removeUserById,
+  fetchUserById,
+};
