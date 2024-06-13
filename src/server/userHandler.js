@@ -205,13 +205,13 @@ const getUser = async (request, h) => {
 
 const updateProfile = async (request, h) => {
   const userId = request.user.id;  // Mengambil ID pengguna dari token yang sudah diverifikasi
-  const { name, gender, weight, height } = request.payload;
+  
 
   try {
-    const updatedData = { name, gender, weight, height };
-
+   
+    const { name, gender, weight, height } = request.payload;
     // Update user data
-    await updateUserById(userId, updatedData);
+    await updateUserById(userId, { name, gender, weight, height });
 
     return h.response({
       status: "success",
@@ -228,7 +228,7 @@ const updateProfile = async (request, h) => {
 
 
 const getProfile = async (request, h) => {
-  const userId = request.user.id;  // Mengambil ID pengguna dari token yang sudah diverifikasi
+  const userId = request.auth.credentials.id; // Mengambil ID pengguna dari token yang sudah diverifikasi
 
   try {
     const userSnapshot = await getUserById(userId);
