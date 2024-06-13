@@ -1,5 +1,5 @@
 const { register, login, updateUser, deleteUser, getUser } = require("../server/userHandler");
-const { verifyToken } = require("../middleware/authentikasi");
+const { verifyToken } = require("../middleware/authMiddleware");
 const { getHistory } = require("../server/formfitHandler");
 
 const routes = [
