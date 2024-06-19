@@ -36,6 +36,10 @@ const createUser = (userData) => {
  * @param {string} [user.email] - The new email of the user.
  * @param {string} [user.password] - The new hashed password of the user.
  * @param {string} [user.name] - The new name of the user.
+ * @param {string} [user.gender] - The new name of the user.
+ * @param {string} [user.weight] - The new name of the user.
+ * @param {string} [user.height] - The new name of the user.
+
  * @returns {Promise<WriteResult>} - A promise that resolves to the write result of the update operation.
  */
 const updateUserById = async (id, user) => {
@@ -55,6 +59,15 @@ const updateUserById = async (id, user) => {
     updateData.name = user.name;
   }
 
+  if (user.gender !== undefined) {
+    updateData.gender = user.gender;
+  }
+  if (user.height !== undefined) {
+    updateData.height = user.height;
+  }
+  if (user.weight !== undefined) {
+    updateData.weight = user.weight;
+  }
   return await userDoc.update(updateData);
 };
 
