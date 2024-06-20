@@ -6,6 +6,18 @@ const { verifyToken } = require("../middleware/authMiddleware");
 const routes = [
   // Test route for checking the server
   {
+    path: '/',
+    method: 'GET',
+    handler: (request, h) => {
+        const response = h.response({
+            status: 'success',
+            message: 'API works',
+        });
+        response.code(200); // Set HTTP status code to 200
+        return response; // Return the response object
+    }
+  },
+  {
     path: '/test',
     method: 'GET',
     handler: (request, h) => {
